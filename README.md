@@ -93,7 +93,6 @@ find_flutter_builds [-s] [-d] [path]
    ```bash
    ./find_flutter_builds -s -d ~/Projects
    ```
-   Output:
 ## License
 
 MIT

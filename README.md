@@ -49,19 +49,22 @@ find_flutter_builds [-s] [-d] [path]
 ### Options
 
 - (none): Outputs plain paths to build directories (ideal for piping).
-- -s: Displays each directory's size alongside its path and shows total size summary.
-- -d: Executes flutter clean on discovered projects and outputs total freed space.
+- `-s`: Displays each directory's size alongside its path and shows total size summary.
+- `-d`: Executes flutter clean on discovered projects and outputs total freed space.
 
 ### Examples
 
 1. List build directories in current directory:
+   ```
    ./find_flutter_builds
 
    Output:
    ./my_app/build
    ./packages/custom_widget/build
+   ```
 
 2. Inspect build directory sizes in a specific workspace:
+   ```bash
    ./find_flutter_builds -s ~/Projects
 
    Output:
@@ -70,8 +73,10 @@ find_flutter_builds [-s] [-d] [path]
    ----------------------------------------
    SUMMARY:
    Total build size: 1.43 GB
+   ```
 
 3. Clean all projects in a directory:
+   ```bash
    ./find_flutter_builds -d ~/Projects
 
    Output:
@@ -82,10 +87,13 @@ find_flutter_builds [-s] [-d] [path]
    ----------------------------------------
    SUMMARY:
    Total space freed: 1.43 GB
+   ```
 
 4. Combine size estimation and cleanup:
-   ./find_flutter_builds -sd ~/Projects
-
+   ```bash
+   ./find_flutter_builds -s -d ~/Projects
+   ```
+   Output:
 ## License
 
 MIT

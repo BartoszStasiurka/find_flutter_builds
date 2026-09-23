@@ -1,0 +1,81 @@
+#!/bin/bash
+
+SHOW_SIZE=false
+DELETE=false
+TARGET_DIR="."
+
+# Parsowanie opcji
+while getopts "sd" opt; do
+  case $opt in
+    s) SHOW_SIZE=true ;;
+    d) DELETE=true ;;
+    *) echo "Usage: $0 [-s] [-d] [path]"; exit 1 ;;
+  esac
+done
+shift $((OPTIND -1))
+
+# Ścieżka jako parametr opcjonalny
+if [ -n "$1" ]; then
+    TARGET_DIR="$1"
+fi
+
+TOTAL_KB=0
+FREED_KB=0
+
+format_size() {
+    local kb=$1
+    if [ "$kb" -ge 1048576 ]; then
+        local gb_int=$((kb / 1048576))
+        local gb_dec=$(( (kb % 1048576) * 100 / 1048576 ))
+        printf "%d.%02d GB" "$gb_int" "$gb_dec"
+    elif [ "$kb" -ge 1024 ]; then
+        local mb_int=$((kb / 1024))
+        local mb_dec=$(( (kb % 1024) * 100 / 1024 ))
+        printf "%d.%02d MB" "$mb_int" "$mb_dec"
+    else
+        echo "${kb} KB"
+    fi
+}
+
+TMP_FILE=$(mktemp)
+find "$TARGET_DIR" -name "pubspec.yaml" -type f 2>/dev/null > "$TMP_FILE"
+
+while read -r pubspec; do
+    [ -z "$pubspec" ] && continue
+    dir=$(dirname "$pubspec")
+    build_dir="$dir/build"
+
+    if [ -d "$build_dir" ]; then
+        size_kb=$(du -sk "$build_dir" 2>/dev/null | cut -f1)
+        size_kb=${size_kb:-0}
+        TOTAL_KB=$((TOTAL_KB + size_kb))
+
+        if [ "$SHOW_SIZE" = true ]; then
+            echo "$build_dir ($(format_size $size_kb))"
+        else
+            echo "$build_dir"
+        fi
+
+        if [ "$DELETE" = true ]; then
+            echo "  └─ Cleaning (flutter clean)..."
+            (cd "$dir" && flutter clean > /dev/null 2>&1)
+            FREED_KB=$((FREED_KB + size_kb))
+        fi
+    fi
+done < "$TMP_FILE"
+
+rm -f "$TMP_FILE"
+
+# Podsumowanie wywoływane tylko przy -s lub -d
+if [ "$SHOW_SIZE" = true ] || [ "$DELETE" = true ]; then
+    echo "----------------------------------------"
+    echo "SUMMARY:"
+    
+    if [ "$SHOW_SIZE" = true ] && [ "$DELETE" = false ]; then
+        echo "Total build size: $(format_size $TOTAL_KB)"
+    fi
+
+    if [ "$DELETE" = true ]; then
+        echo "Total space freed: $(format_size $FREED_KB)"
+    fi
+fi

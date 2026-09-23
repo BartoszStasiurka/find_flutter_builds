@@ -13,7 +13,7 @@ A lightweight Bash CLI tool for macOS and Linux that recursively discovers and c
 
 1. Download or clone the script:
     ```bash
-    curl -O https://raw.githubusercontent.com/your-username/find_flutter_builds/main/find_flutter_builds
+    curl -O https://raw.githubusercontent.com/BartoszStasiurka/find_flutter_builds/main/find_flutter_builds
     ```
 2. Make it executable:
     ```bash
@@ -24,7 +24,7 @@ A lightweight Bash CLI tool for macOS and Linux that recursively discovers and c
 
    # Option A: System-wide installation
    ```bash
-   sudo mv find_flutter_builds /usr/local/bin/
+   sudo mv find_flutter_builds ~/.local/bin
    ```
 
    # Option B: User-level installation (recommended on macOS)

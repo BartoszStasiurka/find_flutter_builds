@@ -22,12 +22,12 @@ A lightweight Bash CLI tool for macOS and Linux that recursively discovers and c
 
 3. Move it to a directory in your PATH (e.g. `/usr/local/bin` or `~/.local/bin`):
 
-   # Option A: System-wide installation
+   ### Option A: System-wide installation
    ```bash
    sudo mv find_flutter_builds ~/.local/bin
    ```
 
-   # Option B: User-level installation (recommended on macOS)
+   ### Option B: User-level installation (recommended on macOS)
    ```bash
    mkdir -p ~/.local/bin
    mv find_flutter_builds ~/.local/bin/
